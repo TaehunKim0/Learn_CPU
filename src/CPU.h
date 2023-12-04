@@ -20,6 +20,7 @@ public:
 public:
   void Cycle();
   bool Init(class MemoryArea* InMemory);
+  void Release();
 
   operator bool() const{
     return bIsActive;

@@ -14,5 +14,7 @@ int main(int argc, char * argv [])
   while(Cpu)
     Cpu.Cycle();
 
+  Cpu.Release();
+
   return 0;
 }

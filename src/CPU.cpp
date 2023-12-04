@@ -31,6 +31,11 @@ bool CPU::Init(MemoryArea* InMemory)
   return true;
 }
 
+void CPU::Release()
+{
+
+}
+
 bool CPU::Run()
 {
   if(!Fetch())
@@ -68,6 +73,8 @@ bool CPU::Decode()
   {
     if(result != "")
       file << result << std::endl;
+
+    file.close();
   }
   else 
   {
