@@ -40,7 +40,7 @@ std::string Assembler::Decode(std::string InCommand, MemoryArea* InMemory)
     }
     else if (s == "POP")
     {
-      InMemory->AddCommand("ADD sp, sp, -4");
+      InMemory->AddCommand("SUB sp, sp, 4");
 
       return "";
     }
@@ -94,6 +94,11 @@ std::string Assembler::Decode(std::string InCommand, MemoryArea* InMemory)
     order++;
 
     decodeCommand += decodeString;
+  }
+
+  if(decodeCommand.size() <= 12)
+  {
+    decodeCommand += "0000";
   }
 
   decodeCommand = (bIndirectMode ? "11" : "00") + decodeCommand;
