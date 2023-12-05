@@ -3,6 +3,7 @@
 #include "DecodeMap.h"
 #include "bitset"
 #include "MemoryArea.h"
+#include "iostream"
 
 Assembler::Assembler()
 {
@@ -60,6 +61,8 @@ std::string Assembler::Decode(std::string InCommand, MemoryArea* InMemory)
       case Operand1:
       case Operand2:
       {
+        std::stringstream HexTobin;
+
         decodeString = DecodingMap.Find(s);
         if(decodeString == "")
         {
@@ -67,13 +70,33 @@ std::string Assembler::Decode(std::string InCommand, MemoryArea* InMemory)
           {
             if(s.substr(0,2) == "0x")
             {
-              s = InMemory->GetMemory(s);
+              int bin;
+              HexTobin << std::hex << s;
+              HexTobin >> bin;
+
+              std::cout << bin;
+
+              std::bitset<8> bit(bin);
+              decodeString += bit.to_string();
+              decodeCommand += decodeString;
+
+              continue;
             }
             else if(s.substr(0,3) == "[0x")
             {
-              auto temp = InMemory->GetMemory(s);
-              s = InMemory->GetMemory(temp);
+              s.erase(remove(s.begin(), s.end(), '['), s.end());
+              s.erase(remove(s.begin(), s.end(), ']'), s.end());
+
+              int bin;
+              HexTobin << std::hex << s;
+              HexTobin >> bin;
+
+              std::bitset<8> bit(bin);
+              decodeString += bit.to_string();
+              decodeCommand += decodeString;
+
               bIndirectMode = true;
+              continue;
             }
           }
 
@@ -94,11 +117,6 @@ std::string Assembler::Decode(std::string InCommand, MemoryArea* InMemory)
     order++;
 
     decodeCommand += decodeString;
-  }
-
-  if(decodeCommand.size() <= 12)
-  {
-    decodeCommand += "0000";
   }
 
   decodeCommand = (bIndirectMode ? "11" : "00") + decodeCommand;

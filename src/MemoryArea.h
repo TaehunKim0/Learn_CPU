@@ -16,13 +16,6 @@ class MemoryArea
 public:
   MemoryArea()
   {
-    MainMemory.emplace("0x11", "3");
-    MainMemory.emplace("[0x11]", "0x70");
-    MainMemory.emplace("0x70", "5");
-
-    MainMemory.emplace("0x40", "4");
-    MainMemory.emplace("[0x40]", "0x80");
-    MainMemory.emplace("0x80", "6");
   }
 
   bool AddCommandsFromFile(std::string InFileName)
@@ -61,11 +54,6 @@ public:
     return command;
   }
 
-  std::string GetMemory(std::string Key)
-  {
-    return MainMemory[Key];
-  }
-
   void AddCommand(std::string InCommand)
   {
     Commands.push(InCommand);
@@ -73,6 +61,5 @@ public:
 
 private:
   std::queue<std::string> Commands;
-  std::map<std::string, std::string> MainMemory;
 };
 
